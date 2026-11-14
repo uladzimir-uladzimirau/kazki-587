@@ -31,8 +31,5 @@ local.properties
 *.swp
 *~
 
-# Rork
-.rork/
+# Local env
 .env
-rork-eslint.config.js
-app/src/main/java/**/Config.kt

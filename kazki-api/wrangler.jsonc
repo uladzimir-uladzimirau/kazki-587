@@ -10,6 +10,9 @@
       { "name": "TALES_DB", "class_name": "TalesDb" }
     ]
   },
+  "r2_buckets": [
+    { "binding": "AUDIO", "bucket_name": "kazki-audio" }
+  ],
   "migrations": [
     { "tag": "v1", "new_sqlite_classes": ["TalesDb"] }
   ]
