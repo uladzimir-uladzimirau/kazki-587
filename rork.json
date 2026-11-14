@@ -1,0 +1,18 @@
+{
+  "$schema": "https://rork.com/schema/rork.json",
+  "apps": [
+    {
+      "name": "KAZKI",
+      "path": "android-kazki",
+      "framework": "kotlin"
+    },
+    {
+      "name": "KAZKI API",
+      "path": "kazki-api",
+      "framework": "web",
+      "settings": {
+        "kind": "server-only"
+      }
+    }
+  ]
+}

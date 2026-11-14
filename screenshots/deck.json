@@ -1,0 +1,64 @@
+{
+  "appContext": {
+    "appName": "KAZKI",
+    "category": "Kids / Books",
+    "summary": "Бясплатныя беларускія народныя казкі на ноч для дзяцей: аўдыяказкі з ілюстрацыямі ў стылі вышыванкі, таймер сну, калыханка, абранае. Без рэкламы, без пакупак і без збору даных."
+  },
+  "devices": {
+    "android": {
+      "theme": {
+        "style": "A warm cream linen world (#F4EDE0) framed by crisp red vyshyvanka-inspired cross-stitch geometric ornaments in #C8372D, with ink-dark #1C1A24 serif typography. The mood is calm, cozy and folk-art, like a hand-embroidered rushnyk at bedtime. Soft evening lighting, subtle woven fabric texture and gentle golden glows keep it quiet, not loud. Exactly one slide flips to a deep red field with cream embroidery for contrast.",
+        "headlineFont": "font-family: 'Lora', serif; weight 700; @import url('https://fonts.googleapis.com/css2?family=Lora:wght@600;700&display=swap&subset=cyrillic');",
+        "headlineFontSize": 120,
+        "mockupIds": {
+          "iphone": "silver",
+          "ipad": "silver"
+        },
+        "palette": {
+          "primary": "#F4EDE0",
+          "secondary": "#C8372D",
+          "accent": "#1C1A24"
+        },
+        "layoutId": "hero-clipped"
+      },
+      "slides": [
+        {
+          "label": "Catalog",
+          "capture": "screenshots/captures/android/01-catalog.png",
+          "prompt": "Hero: warm cream background with red vyshyvanka embroidery motifs; sells a whole library of Belarusian bedtime tales in one place",
+          "backgroundPrompt": "Flat textured digital artwork of warm cream linen fabric (#F4EDE0) with symmetrical red (#C8372D) geometric cross-stitch ornament bands running along the lower edges and small diamond rosettes scattered in the corners. Soft diffused warm light from the top center, subtle woven thread texture, and gentle vignette depth, with the upper 30% calm, open and plain cream for text. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups",
+          "background": "screenshots/backgrounds/android-catalog.png"
+        },
+        {
+          "label": "Player",
+          "capture": "screenshots/captures/android/02-player.png",
+          "prompt": "Soft cream with a calm red accent; sells falling asleep peacefully thanks to the sleep timer",
+          "backgroundPrompt": "Minimal textured artwork of soft cream linen (#F4EDE0) gradually warming toward pale apricot at the bottom, with a single thin red (#C8372D) cross-stitch zigzag line sweeping gently across the lower third. Low evening light comes from the right side, with faint ink-dark (#1C1A24) shadow softness at the edges and fine fabric grain. The upper 30% stays serene and uncluttered. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups",
+          "background": "screenshots/backgrounds/android-player.png"
+        },
+        {
+          "label": "Favorites",
+          "capture": "screenshots/captures/android/03-favorites.png",
+          "prompt": "Inverted contrast slide in deep red with cream embroidery; sells keeping the child's favourite tales close",
+          "backgroundPrompt": "Rich textured artwork of deep red woven fabric (#C8372D darkening to burgundy) with elegant cream (#F4EDE0) geometric cross-stitch rosettes and diamond borders framing the lower half and side edges. Warm velvety lighting glows softly from below, with subtle thread relief and gentle depth shading. The upper 30% remains a calm solid deep red for text overlay. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups",
+          "background": "screenshots/backgrounds/android-favorites.png"
+        },
+        {
+          "label": "About",
+          "capture": "screenshots/captures/android/04-about.png",
+          "prompt": "Calm cream with a soft golden moon glow; sells trust for parents: completely free, no ads, no purchases",
+          "backgroundPrompt": "Calm textured artwork of cream linen (#F4EDE0) with a large soft golden circular glow rising from the upper right like a gentle halo, its warm honey light fading into the fabric. Delicate red (#C8372D) cross-stitch star motifs are sparsely placed along the bottom border, with subtle grain and dreamy diffused atmosphere. The upper 30% stays soft and quiet for text. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups",
+          "background": "screenshots/backgrounds/android-about.png"
+        }
+      ],
+      "headlines": {
+        "be": {
+          "Catalog": "Беларускія<br>казкі на ноч",
+          "Player": "Засынай<br>спакойна",
+          "Favorites": "Любімыя<br>казкі побач",
+          "About": "Бясплатна<br>без рэкламы"
+        }
+      }
+    }
+  }
+}

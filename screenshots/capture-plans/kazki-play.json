@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "platform": "android",
+  "scrollDirection": "page",
+  "screenshotPrompts": [
+    {
+      "label": "Catalog",
+      "screenDescription": "Catalogue of Belarusian bedtime tales with embroidery ornament header",
+      "requiredLabels": ["KAZKI", "Казкі на ноч", "100% бясплатна", "Звярыныя"],
+      "prompt": "Hero: warm cream background with red vyshyvanka embroidery motifs; sells a whole library of Belarusian bedtime tales in one place",
+      "setup": []
+    },
+    {
+      "label": "Player",
+      "screenDescription": "Player for a tale with the 'until the end of the tale' sleep option selected",
+      "requiredLabels": ["Заяц і Вожык", "Пасля казкі:"],
+      "prompt": "Soft cream with a calm red accent; sells falling asleep peacefully thanks to the sleep timer",
+      "setup": [
+        {"action": "tap", "accessibilityId": "tale-zajac_vozyk"},
+        {"action": "tap", "accessibilityId": "player-play"},
+        {"action": "tap", "accessibilityId": "player-favorite"},
+        {"action": "tap", "label": "Да канца казкі", "type": "TextView"}
+      ]
+    },
+    {
+      "label": "Favorites",
+      "screenDescription": "Favourites tab with a saved tale",
+      "requiredLabels": ["Абранае", "Заяц і Вожык", "Каток зь Пеўнікам ды Ліска"],
+      "prompt": "Inverted contrast slide in deep red with cream embroidery; sells keeping the child's favourite tales close",
+      "setup": [
+        {"action": "tap", "accessibilityId": "player-close"},
+        {"action": "tap", "accessibilityId": "tale-kotok"},
+        {"action": "tap", "accessibilityId": "player-play"},
+        {"action": "tap", "accessibilityId": "player-favorite"},
+        {"action": "tap", "accessibilityId": "player-close"},
+        {"action": "tap", "accessibilityId": "tab-favorites"}
+      ]
+    },
+    {
+      "label": "About",
+      "screenDescription": "About the project: fully free, no ads, no purchases, no data collection. Captured by hand: the parental gate needs a 3-second hold, which plans cannot replay.",
+      "requiredLabels": ["Пра праект", "Наш Telegram"],
+      "prompt": "Calm cream with a soft golden moon glow; sells trust for parents: completely free, no ads, no purchases",
+      "setup": [
+        {"action": "tap", "accessibilityId": "tab-parents"}
+      ]
+    }
+  ]
+}
