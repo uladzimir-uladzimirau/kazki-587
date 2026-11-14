@@ -106,6 +106,21 @@ const MIGRATIONS: ((sql: SqlStorage) => void)[] = [
       );
     });
   },
+  (sql) => {
+    // First batch of narrations: m4a (AAC 80k mono) uploaded to the kazki-audio R2
+    // bucket, served via its public r2.dev URL.
+    const AUDIO: [id: string, audioUrl: string, durationSec: number][] = [
+      ["muzyka", "https://pub-1a65051c16c1434c80f6e16db46fe497.r2.dev/muzyka.m4a", 449],
+      ["kot", "https://pub-1a65051c16c1434c80f6e16db46fe497.r2.dev/kot.m4a", 439],
+      ["barsuk", "https://pub-1a65051c16c1434c80f6e16db46fe497.r2.dev/barsuk.m4a", 433],
+    ];
+    AUDIO.forEach(([id, url, durationSec]) => {
+      sql.exec(
+        "UPDATE tales SET audio_url = ?, duration_sec = ?, updated_at = ? WHERE id = ?",
+        url, durationSec, Date.now(), id,
+      );
+    });
+  },
 ];
 
 type TaleRow = {
