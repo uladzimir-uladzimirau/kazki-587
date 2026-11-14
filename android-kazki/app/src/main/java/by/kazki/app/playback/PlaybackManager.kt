@@ -98,6 +98,7 @@ class PlaybackManager(
     // region Public controls
 
     fun play(tale: Tale) {
+        if (!tale.hasAudio) return // narration not uploaded yet; UI shows "Хутка"
         if (currentTale?.id == tale.id && !_ui.value.inLullaby && player.playbackState != Player.STATE_IDLE) {
             if (player.playbackState == Player.STATE_ENDED) player.seekTo(0)
             resetVolume()

@@ -8,8 +8,9 @@ const sample = (n: number) => `https://www.soundhelix.com/examples/mp3/SoundHeli
 
 type SeedTale = [id: string, title: string, category: string, isFree: number, minutes: number, description: string];
 
+// Historical v1 seed, used only by the initial migration on old installs; superseded by the v4 reseed.
 // Placeholder catalogue. Replace audio_url / cover_url per tale via PUT /admin/tales/:id.
-const SEED: SeedTale[] = [
+const SEED_V1: SeedTale[] = [
   ["kotok", "Каток зь Пеўнікам ды Ліска", "zviarynyja", 1, 8, "Ліска ўкрала Пеўніка — але верны Каток са сваёй музыкай ужо пасыпеў на выручку. Цёплая казка пра сяброўства і спагаду."],
   ["zajac_vozyk", "Заяц і Вожык", "zviarynyja", 0, 6, "Ганарысты Заяц пасмяяўся з кароценькіх вожыкавых ног — ды прайграў спаборніцтва ў бегу. Казка пра тое, што разум хутчэйшы за ногі."],
   ["sabaka_vouk", "Сабака і Воўк", "zviarynyja", 0, 7, "Галодны Воўк пазайздросціў сытаму Сабаку, але, убачыўшы следак ад ланцуга на ягонай шыі, паляцеў назад у лес. Воля даражэйшая за міску ежы."],
@@ -26,6 +27,18 @@ const SEED: SeedTale[] = [
   ["sapciucha", "Шаптуха", "autarskija", 0, 8, "Сацыяльна-бытавая казка пра тое, што на ўсякага хітрага знойдзецца яшчэ хітрэйшы."],
   ["alionka", "Алёнка", "autarskija", 0, 10, "Чарадзейная казка пра жаночую смеласць ды рашучасць."],
   ["barsuk", "Чаму барсук і лісіца ў норах жывуць", "autarskija", 0, 7, "Казка пра тое, чаму звяры такія розныя і што з імі здарылася на самой справе."],
+];
+
+// Current starter catalogue (v4): 6 tales, narration not recorded yet — audio_url stays NULL.
+// Set audioUrl / coverUrl / durationSec per tale via PUT /admin/tales/:id once audio is ready.
+type SeedTaleV2 = [id: string, title: string, category: string, description: string];
+const SEED: SeedTaleV2[] = [
+  ["muzyka", "Музыка-чарадзей", "charounyja", "Філасофская казка пра дзівосную сілу музыкі і яе супрацьстаянне злу ды ліху."],
+  ["andrej", "Андрэй за ўсіх мудрэй", "charounyja", "Чарадзейная казка пра чалавечую мудрасць і іспыты жыцця."],
+  ["kot", "Як кот звяроў напалохаў", "zviarynyja", "Іранічная казка пра хітрасць, знаходлівасць і прыткі розум."],
+  ["sapciucha", "Шаптуха", "zabaunyja", "Сацыяльна-бытавая казка пра тое, што на ўсякага хітрага знойдзецца яшчэ хітрэйшы."],
+  ["alionka", "Алёнка", "charounyja", "Чарадзейная казка пра жаночую смеласць ды рашучасць."],
+  ["barsuk", "Чаму барсук і лісіца ў норах жывуць", "mifalagicnyja", "Казка пра тое, чаму звяры такія розныя і што з імі здарылася на самой справе."],
 ];
 
 const CATEGORIES = new Set(["zviarynyja", "charounyja", "mifalagicnyja", "zabaunyja", "autarskija"]);
@@ -46,7 +59,7 @@ const MIGRATIONS: ((sql: SqlStorage) => void)[] = [
       published INTEGER NOT NULL DEFAULT 1,
       updated_at INTEGER NOT NULL
     )`);
-    SEED.forEach(([id, title, category, isFree, minutes, description], i) => {
+    SEED_V1.forEach(([id, title, category, isFree, minutes, description], i) => {
       sql.exec(
         "INSERT INTO tales (id, title, category, cover_url, audio_url, duration_sec, is_free, description, sort_order, published, updated_at) VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, 1, ?)",
         id, title, category, sample((i % 16) + 1), minutes * 60, isFree, description, (i + 1) * 10, Date.now(),
@@ -68,10 +81,35 @@ const MIGRATIONS: ((sql: SqlStorage) => void)[] = [
     sql.exec("UPDATE tales SET is_free = 1");
     sql.exec("DROP TABLE IF EXISTS subscriptions");
   },
+  (sql) => {
+    // New 6-tale starter catalogue replaces the placeholder 16. Narration is not
+    // recorded yet, so audio_url becomes nullable and stays NULL until uploaded.
+    sql.exec("ALTER TABLE tales RENAME TO tales_old");
+    sql.exec(`CREATE TABLE tales (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      category TEXT NOT NULL,
+      cover_url TEXT,
+      audio_url TEXT,
+      duration_sec INTEGER NOT NULL,
+      is_free INTEGER NOT NULL DEFAULT 0,
+      description TEXT NOT NULL DEFAULT '',
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      published INTEGER NOT NULL DEFAULT 1,
+      updated_at INTEGER NOT NULL
+    )`);
+    sql.exec("DROP TABLE tales_old");
+    SEED.forEach(([id, title, category, description], i) => {
+      sql.exec(
+        "INSERT INTO tales (id, title, category, cover_url, audio_url, duration_sec, is_free, description, sort_order, published, updated_at) VALUES (?, ?, ?, NULL, NULL, 0, 1, ?, ?, 1, ?)",
+        id, title, category, description, (i + 1) * 10, Date.now(),
+      );
+    });
+  },
 ];
 
 type TaleRow = {
-  id: string; title: string; category: string; cover_url: string | null; audio_url: string;
+  id: string; title: string; category: string; cover_url: string | null; audio_url: string | null;
   duration_sec: number; is_free: number; description: string; sort_order: number;
 };
 
@@ -121,10 +159,10 @@ export class TalesDb extends DurableObject<Env> {
 
     const title = str("title", existing?.title);
     const category = str("category", existing?.category);
-    const audioUrl = str("audioUrl", existing?.audio_url);
-    const durationSec = num("durationSec", existing?.duration_sec);
-    if (!title || !category || !audioUrl || durationSec === undefined) {
-      return { error: "title, category, audioUrl and durationSec are required for a new tale" };
+    const audioUrl = str("audioUrl", existing?.audio_url) ?? null;
+    const durationSec = num("durationSec", existing?.duration_sec) ?? 0;
+    if (!title || !category) {
+      return { error: "title and category are required for a new tale" };
     }
     if (!CATEGORIES.has(category)) return { error: `category must be one of ${[...CATEGORIES].join(", ")}` };
 

@@ -81,9 +81,8 @@ fun CatalogScreen(contentPadding: PaddingValues, onTale: (Tale) -> Unit) {
         ?.takeIf { playback.taleId == null && (progress[it] ?: 0f) > 0f }
         ?.let { id -> tales.firstOrNull { it.id == id } }
 
-    val sections = Category.entries.mapNotNull { cat ->
-        tales.filter { it.categoryEnum == cat }.takeIf { it.isNotEmpty() }?.let { cat to it }
-    }
+    // All sections stay visible, even empty ones — they get a "Хутка" placeholder.
+    val sections = Category.entries.map { cat -> cat to tales.filter { it.categoryEnum == cat } }
 
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -129,7 +128,14 @@ fun CatalogScreen(contentPadding: PaddingValues, onTale: (Tale) -> Unit) {
                                 .padding(start = 20.dp, end = 20.dp, top = 22.dp, bottom = 12.dp)
                                 .semantics { heading() },
                         )
-                        if (items.size == 1) {
+                        if (items.isEmpty()) {
+                            Text(
+                                "Хутка",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Kazki.CreamMuted,
+                                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 4.dp),
+                            )
+                        } else if (items.size == 1) {
                             val tale = items.first()
                             WideTaleCard(
                                 tale = tale,

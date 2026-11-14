@@ -116,7 +116,7 @@ fun PlayerScreen(taleId: String, onClose: () -> Unit) {
     val tale = tales.firstOrNull { it.id == taleId }
 
     LaunchedEffect(taleId) {
-        if (tale != null && ui.taleId != taleId) app.playback.play(tale)
+        if (tale != null && tale.hasAudio && ui.taleId != taleId) app.playback.play(tale)
     }
     if (tale == null) {
         LaunchedEffect(Unit) { onClose() }
@@ -156,6 +156,7 @@ fun PlayerScreen(taleId: String, onClose: () -> Unit) {
             Text(tale.description, style = MaterialTheme.typography.bodyLarge, color = Kazki.Cream.copy(alpha = 0.88f))
 
             Spacer(Modifier.height(20.dp))
+            if (tale.hasAudio) {
             Slider(
                 value = (position.toFloat() / duration).coerceIn(0f, 1f),
                 onValueChange = { scrubbing = it },
@@ -303,6 +304,9 @@ fun PlayerScreen(taleId: String, onClose: () -> Unit) {
                     }
                 }
             }
+            } else {
+                SoonPanel()
+            }
             Spacer(Modifier.height(24.dp))
             OutlinedButton(
                 onClick = { if (ParentGateState.isOpen) shareTale(context, tale.title) else shareGate = true },
@@ -329,6 +333,35 @@ fun PlayerScreen(taleId: String, onClose: () -> Unit) {
         }
 
         LullabyOverlay(visible = ui.inLullaby, onStop = { app.playback.stopLullaby() })
+    }
+}
+
+/** Shown instead of playback controls while the tale's narration is not uploaded yet. */
+@Composable
+private fun SoonPanel() {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+            .background(Kazki.Surface)
+            .padding(vertical = 28.dp, horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            Icons.Rounded.Bedtime,
+            contentDescription = null,
+            tint = Kazki.Gold,
+            modifier = Modifier.size(40.dp),
+        )
+        Spacer(Modifier.height(12.dp))
+        Text("Хутка", style = MaterialTheme.typography.headlineSmall, color = Kazki.Cream)
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Азвучка гэтай казкі яшчэ рыхтуецца",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Kazki.CreamMuted,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

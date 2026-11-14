@@ -20,14 +20,19 @@ data class Tale(
     val title: String,
     val category: String,
     val coverUrl: String? = null,
-    val audioUrl: String,
-    val durationSec: Int,
+    val audioUrl: String? = null,
+    val durationSec: Int = 0,
     val isFree: Boolean,
     val description: String,
     val sortOrder: Int = 0,
 ) {
     val categoryEnum: Category? get() = Category.from(category)
-    val durationLabel: String get() = "${(durationSec + 30) / 60} хв"
+
+    /** Narration is uploaded to the catalogue later; until then the tale is marked "Хутка". */
+    val hasAudio: Boolean get() = !audioUrl.isNullOrEmpty()
+
+    val durationLabel: String
+        get() = if (hasAudio) "${(durationSec + 30) / 60} хв" else "Хутка"
 }
 
 @Serializable
