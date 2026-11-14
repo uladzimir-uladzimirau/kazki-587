@@ -3,3 +3,4 @@ node_modules
 .expo
 .jdk21/
 .tools/
+.wrangler/
