@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "app.rork.vs5cyeao6lm3069le5zsh"
+    namespace = "by.kazki.app"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "app.rork.vs5cyeao6lm3069le5zsh"
+        applicationId = "by.kazki.app"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
