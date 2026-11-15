@@ -135,6 +135,22 @@ const MIGRATIONS: ((sql: SqlStorage) => void)[] = [
       );
     });
   },
+  (sql) => {
+    // Two original tales (autarskija): mp3 narrations and webp covers on R2.
+    const R2 = "https://pub-1a65051c16c1434c80f6e16db46fe497.r2.dev";
+    const TALES: [id: string, title: string, durationSec: number, sortOrder: number][] = [
+      ["dyvanok", "Кошка Мышка і жоўты дыванок", 676, 70],
+      ["kupalle", "Купалле, чупакабра і рэдкія ружы", 1391, 80],
+    ];
+    TALES.forEach(([id, title, durationSec, sortOrder]) => {
+      sql.exec(
+        `INSERT INTO tales (id, title, category, cover_url, audio_url, duration_sec, is_free, description, sort_order, published, updated_at)
+         VALUES (?, ?, 'autarskija', ?, ?, ?, 1, '', ?, 1, ?)
+         ON CONFLICT(id) DO NOTHING`,
+        id, title, `${R2}/cover_${id}.webp`, `${R2}/${id}.mp3`, durationSec, sortOrder, Date.now(),
+      );
+    });
+  },
 ];
 
 type TaleRow = {

@@ -33,3 +33,7 @@ local.properties
 
 # Local env
 .env
+
+# Signing
+keystore.properties
+*.jks
